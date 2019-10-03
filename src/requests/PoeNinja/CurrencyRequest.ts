@@ -1,7 +1,7 @@
 import { Request } from "../Request";
-import { JsonValidator } from "../../validators/JsonValidator";
 import * as Ajv from "ajv";
 import { Currency, PoeNinjaInterface, RequestInterface } from "../../types";
+import validateJson from "../../validators/validateJson";
 
 export class CurrencyRequest extends Request {
   private url: string =
@@ -15,7 +15,7 @@ export class CurrencyRequest extends Request {
     } catch (err) {
       throw new Error(`api hasn't respond to request`);
     }
-    if (!JsonValidator.validate(response.body)) {
+    if (!validateJson(response.body)) {
       throw new Error(this.errorMessage);
     }
     const responseData = JSON.parse(response.body);

@@ -1,6 +1,6 @@
 import { RequestParamHandler } from "express";
 import { Currency, Server } from "../types";
-import { CurrencyDatabase as CurrencyDbApi } from "../databasesApi/CurrencyDatabase";
+import CurrencyDbApi from "../databasesApi/CurrencyDatabase";
 import { CurrencyConverter } from "../converters/CurrencyConverter";
 
 const express = require("express");

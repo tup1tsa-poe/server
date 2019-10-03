@@ -1,11 +1,13 @@
+import { Request } from "../Request";
+import validateJson from "../../validators/validateJson";
+
 // requests to http://poe.ninja/stats
 
-import { Request } from "../Request";
-import { JsonValidator } from "../../validators/JsonValidator";
+class LatestIdRequest extends Request {
+  private officialApiId: string = "0000";
 
-export class LatestIdRequest extends Request {
-  private officialApiId: string;
   private poeApiUrl: string = "http://api.poe.ninja/api/Data/GetStats";
+
   private wrongResponseError: string =
     "Poe ninja api id body should be valid json string";
 
@@ -21,7 +23,7 @@ export class LatestIdRequest extends Request {
   }
 
   private getIdFromResponse(body: string): string {
-    if (!JsonValidator.validate(body)) {
+    if (!validateJson(body)) {
       throw new Error(this.wrongResponseError);
     }
     const parsedBody = JSON.parse(body);
@@ -34,3 +36,5 @@ export class LatestIdRequest extends Request {
     return parsedBody.next_change_id;
   }
 }
+
+export default LatestIdRequest;

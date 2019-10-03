@@ -1,6 +1,6 @@
 import { RequestParamHandler } from "express";
 import { Server } from "../types";
-import { LatestIdRequest } from "../requests/PoeNinja/LatestIdRequest";
+import LatestIdRequest from "../requests/PoeNinja/LatestIdRequest";
 
 const express = require("express");
 

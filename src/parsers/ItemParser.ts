@@ -3,7 +3,7 @@ import { InternalApi } from "../types";
 
 import Item = InternalApi.Item;
 
-export class ItemParser {
+class ItemParser {
   private items: Item[];
 
   constructor(items: Item[]) {
@@ -29,7 +29,7 @@ export class ItemParser {
       .map(item => item.modifiers)
       .reduce((currentMods, totalMods) => {
         return totalMods.concat(currentMods);
-      }, [])
+      })
       .value();
     const modifiersByType: string[][] = [];
     allModifiers.forEach(modifier => {
@@ -74,3 +74,5 @@ export class ItemParser {
       .value();
   }
 }
+
+export default ItemParser;

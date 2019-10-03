@@ -1,9 +1,13 @@
-import { Database } from "./Database";
-import { Modifiers, OfficialApi } from "../types";
+import Database from "./Database";
+import { Modifiers } from "../types";
 
 import Modifier = Modifiers.Modifier;
-import ModifiersSearchOptions = Modifiers.ModifiersSearchOptions;
-import Stash = OfficialApi.Stash;
+
+interface ModifiersSearchOptions {
+  readonly names?: [];
+  readonly types?: [];
+  readonly used_in?: [];
+}
 
 // todo: implement next
 // 1) when parsing all stashes, find all possible unique modifiers
@@ -32,44 +36,12 @@ export class ModifiersDatabase extends Database {
   }
 
   public async writeModifiers(modifiers: Modifier[]) {
-    await this.write(modifiers, { ordered: false });
+    await this.insert(modifiers, { ordered: false });
     const result = this.getResult();
     if (result.error) {
       // check the error (it can either be duplicate insert  or some other error)
       throw new Error("There were some problems saving modifiers");
     }
-  }
-
-  public async tempUpdate(stashes: Stash[], changeId: string) {
-    for (const stash of stashes) {
-      let abyss = 0;
-      let other = 0;
-      stash.items.forEach(item => {
-        if (item.league === "Abyss") {
-          abyss++;
-        } else {
-          other++;
-        }
-      });
-      try {
-        await this.upsert(
-          {
-            _id: stash.id
-          },
-          {
-            _id: stash.id,
-            abyss,
-            other
-          }
-        );
-      } catch (err) {
-        debugger;
-      }
-    }
-    return await this.upsert(
-      { latest_id: { $exists: true } },
-      { latest_id: changeId }
-    );
   }
 
   public async fetchAllModifiers(): Promise<object[]> {

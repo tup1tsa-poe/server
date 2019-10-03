@@ -1,4 +1,4 @@
-export const validate = (possibleJson: string): boolean => {
+const validateJson = (possibleJson: string): boolean => {
   try {
     debugger;
     JSON.parse(possibleJson);
@@ -7,3 +7,5 @@ export const validate = (possibleJson: string): boolean => {
     return false;
   }
 };
+
+export default validateJson;

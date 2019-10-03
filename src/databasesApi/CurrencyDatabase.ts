@@ -1,8 +1,8 @@
 import * as Ajv from "ajv";
-import { Database } from "./Database";
+import Database from "./Database";
 import { Currency } from "../types";
 
-export class CurrencyDatabase extends Database {
+class CurrencyDatabase extends Database {
   constructor() {
     super("currency");
   }
@@ -69,3 +69,5 @@ export class CurrencyDatabase extends Database {
     return false;
   }
 }
+
+export default CurrencyDatabase;

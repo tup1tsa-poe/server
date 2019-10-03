@@ -1,3 +1,6 @@
 {
-  "extends": ["airbnb-typescript/base", "prettier"]
+  "extends": ["airbnb-typescript/base", "prettier"],
+  "rules": {
+    "@typescript-eslint/indent": false
+  }
 }

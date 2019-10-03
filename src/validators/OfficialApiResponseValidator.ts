@@ -1,16 +1,19 @@
-import * as Ajv from "ajv";
-import * as _ from "lodash";
+import Ajv from "ajv";
+import _ from "lodash";
 import { OfficialApi } from "../types";
 import { categories } from "../categories";
 
 import GeneralResponse = OfficialApi.GeneralResponse;
 
-export class OfficialApiResponseValidator {
+class OfficialApiResponseValidator {
   public static validate(response: object): response is GeneralResponse {
     const booleanType = { type: "boolean" };
     const stringType = { type: "string" };
+    const stringArrayType = { type: "array", items: stringType };
     const numberType = { type: "number" };
     const nullType = { type: "null" };
+
+    const socketsSchema = { type: "object" };
 
     const itemPropertiesSchema = {
       type: "array",
@@ -179,3 +182,5 @@ export class OfficialApiResponseValidator {
     return false;
   }
 }
+
+export default OfficialApiResponseValidator;

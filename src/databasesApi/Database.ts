@@ -5,12 +5,14 @@ interface CrudResult {
   data?: {}[];
 }
 
-export class Database {
+class Database {
   private url: string = "mongodb://192.168.0.101:27017/poe_server_test";
 
-  private result: CrudResult;
+  private result: CrudResult = {};
 
-  private internalDb: Db;
+  private internalDb!: Db;
+
+  private connection!: MongoClient;
 
   private collectionName: string;
 
@@ -35,7 +37,7 @@ export class Database {
     } catch (err) {
       this.result.error = err;
     }
-    return await this.internalDb.close();
+    return this.connection.close();
   }
 
   protected async read(
@@ -59,7 +61,7 @@ export class Database {
     } catch (err) {
       this.result.error = err;
     }
-    return await this.internalDb.close();
+    return await this.connection.close();
   }
 
   protected async update(
@@ -79,7 +81,7 @@ export class Database {
     } catch (err) {
       this.result.error = err;
     }
-    return await this.internalDb.close();
+    return await this.connection.close();
   }
 
   protected async delete(query: object): Promise<void> {}
@@ -87,9 +89,12 @@ export class Database {
   private async connect(): Promise<void> {
     this.result = {};
     try {
-      this.internalDb = await MongoClient.connect(this.url);
+      this.connection = await MongoClient.connect(this.url);
+      this.internalDb = this.connection.db("test");
     } catch (err) {
       this.result.error = err;
     }
   }
 }
+
+export default Database;

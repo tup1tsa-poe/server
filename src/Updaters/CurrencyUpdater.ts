@@ -1,9 +1,9 @@
 import * as moment from "moment";
 import { CurrencyRequest } from "../requests/PoeNinja/CurrencyRequest";
-import { CurrencyDatabase } from "../databasesApi/CurrencyDatabase";
+import CurrencyDatabase from "../databasesApi/CurrencyDatabase";
 import { Currency } from "../types";
 
-export class CurrencyUpdater {
+class CurrencyUpdater {
   public static run(): void {
     this.update();
     const sixHours = 6 * 60 * 60 * 1000;
@@ -44,3 +44,5 @@ export class CurrencyUpdater {
     return now.diff(list.updateTime, "hours") >= 3;
   }
 }
+
+export default CurrencyUpdater;

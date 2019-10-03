@@ -16,7 +16,7 @@ class Time {
     "years"
   ];
 
-  private parsedTime: Moment;
+  private parsedTime!: Moment;
 
   constructor(rawTime: string) {
     this.rawTime = rawTime;

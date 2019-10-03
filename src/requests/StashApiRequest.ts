@@ -1,7 +1,7 @@
 import { Request } from "./Request";
 import { RequestInterface } from "../types";
 
-export class StashApiRequest extends Request {
+class StashApiRequest extends Request {
   private id: string;
 
   private url: string;
@@ -11,14 +11,12 @@ export class StashApiRequest extends Request {
   constructor(id: string) {
     super();
     this.id = id;
-    this.generateUrl();
+    this.url = `http://www.pathofexile.com/api/public-stash-tabs?id=${this.id}`;
   }
 
   public async fetchStashes(): Promise<RequestInterface.Response> {
     return this.fetchData(this.url, { timeout: this.responseTimeout });
   }
-
-  private generateUrl(): void {
-    this.url = `http://www.pathofexile.com/api/public-stash-tabs?id=${this.id}`;
-  }
 }
+
+export default StashApiRequest;
