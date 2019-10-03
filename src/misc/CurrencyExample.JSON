@@ -1,0 +1,265 @@
+{
+  "exchangeRates": [
+    {
+      "name": "Blessing of Chayula",
+      "chaosEquivalent": 413.798449612403,
+      "shorthands": [
+        "blessing-chayula",
+        "blessing-of-chayula",
+        "Blessing of Chayula"
+      ]
+    },
+    {
+      "name": "Mirror Shard",
+      "chaosEquivalent": 206.974398758728,
+      "shorthands": ["mirror-shard", "Mirror Shard"]
+    },
+    {
+      "name": "Exalted Orb",
+      "chaosEquivalent": 39.4207800312012,
+      "shorthands": [
+        "ex",
+        "exe",
+        "exa",
+        "exalt",
+        "exalts",
+        "exalted",
+        "Exalted Orb"
+      ]
+    },
+    {
+      "name": "Blessing of Uul-Netol",
+      "chaosEquivalent": 29.3962061944057,
+      "shorthands": ["blessing-of-uul-netol", "blessing-uul-netol"]
+    },
+    {
+      "name": "Divine Orb",
+      "chaosEquivalent": 8.55943005602014,
+      "shorthands": ["div", "divine"]
+    },
+    {
+      "name": "Blessing of Tul",
+      "chaosEquivalent": 6,
+      "shorthands": ["blessing-of-tul", "blessing-tul"]
+    },
+    {
+      "name": "Blessing of Esh",
+      "chaosEquivalent": 5.00001500015,
+      "shorthands": ["blessing-of-esh", "blessing-esh"]
+    },
+    {
+      "name": "Ancient Orb",
+      "chaosEquivalent": 5,
+      "shorthands": ["ancient-orb"]
+    },
+    {
+      "name": "Master Cartographer's Sextant",
+      "chaosEquivalent": 4.25,
+      "shorthands": ["master", "master-sextant"]
+    },
+    {
+      "name": "Harbinger's Orb",
+      "chaosEquivalent": 3.0500031000062,
+      "shorthands": ["harbingers-orb"]
+    },
+    {
+      "name": "Blessing of Xoph",
+      "chaosEquivalent": 2.5,
+      "shorthands": ["blessing-of-xoph", "blessing-xoph"]
+    },
+    {
+      "name": "Journeyman Cartographer's Sextant",
+      "chaosEquivalent": 2.3750112501125,
+      "shorthands": ["journeyman", "journeyman-sextant"]
+    },
+    {
+      "name": "Splinter of Chayula",
+      "chaosEquivalent": 2.05000105000105,
+      "shorthands": ["splinter-of-chayula", "splinter-chayula"]
+    },
+    {
+      "name": "Exalted Shard",
+      "chaosEquivalent": 1.93750585941162,
+      "shorthands": ["exalted-shard"]
+    },
+    {
+      "name": "Orb of Annulment",
+      "chaosEquivalent": 1.8999928000576,
+      "shorthands": ["orb-of-annulment"]
+    },
+    {
+      "name": "Apprentice Cartographer's Sextant",
+      "chaosEquivalent": 0.977272293388824,
+      "shorthands": ["apprentice", "apprentice-sextant"]
+    },
+    {
+      "name": "Orb of Regret",
+      "chaosEquivalent": 0.954545454545455,
+      "shorthands": ["regret", "regrets"]
+    },
+    {
+      "name": "Gemcutter's Prism",
+      "chaosEquivalent": 0.742150635576798,
+      "shorthands": ["gcp", "gemc"]
+    },
+    {
+      "name": "Regal Orb",
+      "chaosEquivalent": 0.728418586206897,
+      "shorthands": ["regal", "rega"]
+    },
+    {
+      "name": "Vaal Orb",
+      "chaosEquivalent": 0.690478333333333,
+      "shorthands": ["vaal"]
+    },
+    {
+      "name": "Orb of Fusing",
+      "chaosEquivalent": 0.488398777506112,
+      "shorthands": ["fus", "fuse", "fusing", "fusings"]
+    },
+    {
+      "name": "Orb of Scouring",
+      "chaosEquivalent": 0.4822340919647,
+      "shorthands": ["scour", "scouring"]
+    },
+    {
+      "name": "Blessed Orb",
+      "chaosEquivalent": 0.425879591424674,
+      "shorthands": ["blessed", "bles"]
+    },
+    {
+      "name": "Splinter of Xoph",
+      "chaosEquivalent": 0.400791428571429,
+      "shorthands": ["splinter-of-xoph", "splinter-xoph"]
+    },
+    {
+      "name": "Cartographer's Chisel",
+      "chaosEquivalent": 0.310802651515152,
+      "shorthands": ["chis", "chisel", "chisels", "cart"]
+    },
+    {
+      "name": "Orb of Alchemy",
+      "chaosEquivalent": 0.26366970437018,
+      "shorthands": ["alc", "alch", "alchemy"]
+    },
+    {
+      "name": "Silver Coin",
+      "chaosEquivalent": 0.247252619047619,
+      "shorthands": ["silver"]
+    },
+    {
+      "name": "Orb of Horizons",
+      "chaosEquivalent": 0.243696,
+      "shorthands": ["orb-of-horizons"]
+    },
+    {
+      "name": "Splinter of Uul-Netol",
+      "chaosEquivalent": 0.229166666666667,
+      "shorthands": ["splinter-of-uul-netol", "splinter-uul-netol"]
+    },
+    {
+      "name": "Glassblower's Bauble",
+      "chaosEquivalent": 0.216606764705882,
+      "shorthands": ["bauble", "glass", "gla", "ba"]
+    },
+    {
+      "name": "Orb of Binding",
+      "chaosEquivalent": 0.225,
+      "shorthands": ["orb-of-binding"]
+    },
+    {
+      "name": "Annulment Shard",
+      "chaosEquivalent": 0.205126538461538,
+      "shorthands": ["annulment-shard"]
+    },
+    {
+      "name": "Splinter of Tul",
+      "chaosEquivalent": 0.141706503650146,
+      "shorthands": ["splinter-of-tul", "splinter-tul"]
+    },
+    {
+      "name": "Splinter of Esh",
+      "chaosEquivalent": 0.135856008403361,
+      "shorthands": ["splinter-of-esh", "splinter-esh"]
+    },
+    {
+      "name": "Jeweller's Orb",
+      "chaosEquivalent": 0.117304532163743,
+      "shorthands": ["jew", "jewel", "jeweller", "jewellers"]
+    },
+    {
+      "name": "Orb of Chance",
+      "chaosEquivalent": 0.116296264367816,
+      "shorthands": ["chance", "chanc"]
+    },
+    {
+      "name": "Engineer's Orb",
+      "chaosEquivalent": 0.116152719141324,
+      "shorthands": ["engineers-orb"]
+    },
+    {
+      "name": "Chromatic Orb",
+      "chaosEquivalent": 0.0784615384615385,
+      "shorthands": ["chrom", "chrome", "chromes", "chromatic", "chromatics"]
+    },
+    {
+      "name": "Orb of Alteration",
+      "chaosEquivalent": 0.0608498105612124,
+      "shorthands": ["alt", "alts", "alteration"]
+    },
+    {
+      "name": "Blacksmith's Whetstone",
+      "chaosEquivalent": 0.0266532783505155,
+      "shorthands": [
+        "whetst",
+        "whetstone",
+        "whetstones",
+        "blacksmith",
+        "whet",
+        "bla",
+        "whe"
+      ]
+    },
+    {
+      "name": "Perandus Coin",
+      "chaosEquivalent": 0.0174710157480315,
+      "shorthands": ["p", "coin", "coins", "perandus", "shekel"]
+    },
+    {
+      "name": "Orb of Augmentation",
+      "chaosEquivalent": 0.0187319512195122,
+      "shorthands": ["aug", "augs", "augment", "augmentation"]
+    },
+    {
+      "name": "Orb of Transmutation",
+      "chaosEquivalent": 0.0152114070351759,
+      "shorthands": [
+        "tra",
+        "trans",
+        "transmute",
+        "transmutes",
+        "transmutty",
+        "transmutation"
+      ]
+    },
+    {
+      "name": "Portal Scroll",
+      "chaosEquivalent": 0.0142410963855422,
+      "shorthands": ["portal", "port"]
+    },
+    {
+      "name": "Armourer's Scrap",
+      "chaosEquivalent": 0.00938873195229127,
+      "shorthands": [
+        "scrap",
+        "scraps",
+        "armour",
+        "armours",
+        "armourer",
+        "armourers",
+        "arm"
+      ]
+    }
+  ],
+  "updateTime": 1503592666760.0
+}
