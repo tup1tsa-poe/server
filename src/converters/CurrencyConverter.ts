@@ -1,6 +1,6 @@
 import { Currency } from "../types";
 
-export class CurrencyConverter {
+class CurrencyConverter {
   private list: Currency.ChaosEquivalent[];
 
   private from: Currency.Quantity;
@@ -107,3 +107,5 @@ export class CurrencyConverter {
     return foundedCurrency;
   }
 }
+
+export default CurrencyConverter;

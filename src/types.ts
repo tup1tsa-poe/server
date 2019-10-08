@@ -89,13 +89,6 @@ export namespace PoeNinjaInterface {
 }
 
 export namespace OfficialApi {
-  export interface ItemType {
-    accessories?: [string];
-    armour?: [string];
-    weapons?: [string];
-    jewels?: [string];
-  }
-
   /** For some stupid reason it can be either item rarity or item type */
   export enum ItemRarity {
     normal = 0,
@@ -107,42 +100,31 @@ export namespace OfficialApi {
     "divination card",
     "quest item",
     prophecy,
-    relic
-  }
-
-  export enum ItemPropertyValueType {
-    /** physical value */
-    "white" = 0,
-    /** blue is used for modified values. Whatever that means */
-    "blue" = 1,
-    /** where are 2 and 3? */
-    "fire" = 4,
-    "cold" = 5,
-    "lightning" = 6,
-    "chaos" = 7
+    relic,
+    // what type is that? check it out
+    unknown
   }
 
   /** can be either property or requirement */
   export interface ItemProperty {
     /** for example: 'aura, spell, aoe', 'cast time' */
-    name: string;
-    /** number is value, and then type (it's number too) */
-    values: [number, ItemPropertyValueType];
+    readonly name: string;
+    readonly values: [string, number];
     /** wtf? */
-    displayMode: number;
+    readonly displayMode: number;
     /** no clue. */
-    type?: number;
+    readonly type?: number;
     /** experience for gems? */
-    progress?: number;
+    readonly progress?: number;
   }
 
   export interface Socket {
     /** number for linked group. Used for calculation of item's links */
     group: number;
-    /** Socket color: Green, White, Red, Blue, Abyss (though it's not a color but type) */
-    sColour: "G" | "W" | "R" | "B" | "A";
-    /** attribute of socket. Stands for strength, dex, int, general and false for abyss */
-    attr: "S" | "D" | "I" | "G" | false;
+    /** Socket color: Green, White, Red, Blue, Abyss, Delve */
+    sColour: "G" | "W" | "R" | "B" | "A" | "DV";
+    /** attribute of socket. Stands for strength, dex, int, general, abyss, delve */
+    attr: "S" | "D" | "I" | "G" | "A" | "DV";
   }
 
   export interface ItemShallow {
@@ -160,89 +142,128 @@ export namespace OfficialApi {
     readonly itemJson: string;
   }
 
-  // todo: check item interface. Some properties can be optional or some aren't stated atm. Check with array.every
+  interface IncubatedItem {
+    readonly level: number;
+    readonly name: string;
+    readonly progress: number;
+    readonly total: number;
+  }
+
+  interface HybridItem {
+    readonly isVaalGem?: boolean;
+    readonly baseTypeName: string;
+    readonly explicitMods: ReadonlyArray<string>;
+    readonly properties: ReadonlyArray<ItemProperty>;
+    readonly secDescrText: string;
+  }
+
+  type MainCategory =
+    | "maps"
+    | "accessories"
+    | "armour"
+    | "jewels"
+    | "weapons"
+    | "gems"
+    | "flasks"
+    | "currency"
+    | "cards"
+    | "monsters";
+  interface ExtendedProperties {
+    readonly category: MainCategory;
+    readonly subcategories?: ReadonlyArray<string>;
+    readonly prefixes?: number;
+    readonly suffixes?: number;
+  }
+
   export interface ItemFull {
     /** optional flag for new jewels */
-    abyssJewel?: boolean;
+    readonly abyssJewel?: boolean;
     /** no clue. Check it later */
-    additionalProperties?: ItemProperty[];
+    readonly additionalProperties?: ReadonlyArray<ItemProperty>;
     /** something about divination cards */
-    artFilename?: string;
-    /**  can be 'maps' or { 'accessories': ['ring'] } */
-    category: string | ItemType;
-    corrupted?: boolean;
-    cosmeticMods?: string[];
+    readonly artFilename?: string;
+    readonly corrupted?: boolean;
+    readonly cosmeticMods?: ReadonlyArray<string>;
     /** user crafted mods via masters */
-    craftedMods?: string[];
+    readonly craftedMods?: ReadonlyArray<string>;
+    readonly delve?: boolean;
     /** main description */
-    descrText?: string;
+    readonly descrText?: string;
     /** item is duplicated via mirror or randomly from chest */
-    duplicated?: boolean;
+    readonly duplicated?: boolean;
     /** is item elder */
-    elder?: boolean;
+    readonly elder?: boolean;
     /** labyrinth enchantments */
-    enchantMods?: string[];
+    readonly enchantMods?: ReadonlyArray<string>;
     /** mods 'under' the line */
-    explicitMods?: string[];
+    readonly explicitMods?: ReadonlyArray<string>;
+    readonly extended?: ExtendedProperties;
     /** ? */
-    flavourText?: string[];
+    readonly flavourText?: ReadonlyArray<string>;
     /** item rarity.  */
-    frameType: ItemRarity;
+    readonly frameType: ItemRarity;
     /** slot height */
-    h: number;
+    readonly h: number;
+    // what is it?
+    readonly hybrid?: HybridItem;
     /** url for icon image */
-    icon: string;
+    readonly icon: string;
     /** unique item id which wouldn't change after using currency on the item */
     readonly id: string;
-    identified: boolean;
+    readonly identified: boolean;
     /** item level */
-    ilvl: number;
+    readonly ilvl: number;
     /** mods 'above' the line */
-    implicitMods?: string[];
+    readonly implicitMods?: ReadonlyArray<string>;
+    readonly incubatedItem?: IncubatedItem;
     /** 'Stash25' or 'Stash3' */
-    inventoryId: string;
-    isRelic?: boolean;
+    readonly inventoryId: string;
+    readonly isRelic?: boolean;
     /** standard, hardcore, abyss etc */
-    league: string;
-    /** wtf? */
-    lockedToCharacter?: boolean;
+    readonly league: string;
+    // this property may not exist at all
+    readonly lockedToCharacter?: boolean;
     /** stack size. Mostly irrelevant */
-    maxStackSize?: number;
+    readonly maxStackSize?: number;
     /** either regular name for a unique item or weird like '<<set:MS>><<set:M>><<set:S>>Armageddon Skewer' */
     // also name can be empty string ''
-    name: string;
-    nextLevelRequirements?: ItemProperty[];
+    readonly name: string;
+    readonly nextLevelRequirements?: ReadonlyArray<ItemProperty>;
     /** can be price or regular note. */
-    note?: string;
+    readonly note?: string;
     /** specify armour, evasion,etc */
-    properties?: ItemProperty[];
-    prophecyDiffText?: string;
-    prophecyText?: string;
+    readonly properties?: ReadonlyArray<ItemProperty>;
+    // may not exist
+    readonly prophecyDiffText?: string;
+    readonly prophecyText?: string;
     /** level, dex, str etc */
-    requirements?: ItemProperty[];
+    readonly requirements?: ReadonlyArray<ItemProperty>;
     /** mostly irrelevant second description */
-    secDescrText?: string;
+    readonly secDescrText?: string;
     /** is item dropped in shaper map */
-    shaper: boolean;
+    readonly shaper?: boolean;
     /** irrelevant gems inside sockets. It's like recursion, because gem is an item too in general */
-    socketedItems?: object[];
-    sockets?: Socket[];
-    stackSize?: number;
+    readonly socketedItems?: object[];
+    readonly sockets?: ReadonlyArray<Socket>;
+    readonly stackSize?: number;
     /** gem support? */
-    support?: boolean;
-    talismanTier?: number;
+    readonly support?: boolean;
+    readonly synthesised?: boolean;
+    readonly talismanTier?: number;
     /** item base type, mixed with affix name for magic/rare items */
-    typeLine: string;
+    readonly typeLine?: string;
     /** mods for flasks */
-    utilityMods?: string[];
+    readonly utilityMods?: ReadonlyArray<string>;
+    readonly veiled?: boolean;
+    readonly veiledMods?: ReadonlyArray<string>;
     /** wtf? How an item can be verified? By whom? */
-    verified: boolean;
+    readonly verified: boolean;
     /** slow width */
-    w: number;
+    readonly w: number;
     /** horizontal item position in the stash */
-    x: number;
+    readonly x: number;
     /** vertical item position in the stash */
-    y: number;
+    readonly y: number;
   }
 
   export type Item = ItemFull | ItemShallow;

@@ -1,7 +1,7 @@
 import validateResponse from "./validators/validateOfficialApiResponse";
 import StashApiRequest from "./requests/StashApiRequest";
 import { OfficialApi, RequestInterface } from "./types";
-// import { OfficialApiParser } from "./parsers/OfficialApiParser";
+import validateOfficialApiItem from "./validators/validateOfficialApiItem";
 // import { itemBeautify } from "./parsers/itemBeautify";
 // import ItemParser from "./parsers/ItemParser";
 
@@ -27,8 +27,12 @@ async function fetchResponsesContinuously(
   id: string
 ): Promise<GeneralResponse> {
   const res = await getResponse(id);
-  // const parser = new OfficialApiParser(res);
-  // const items = parser.getAllItems();
+  const items = res.stashes
+    .map(stash => stash.items)
+    .reduce((allItems, currentItems) => allItems.concat(currentItems), []);
+  const isValid = validateOfficialApiItem(items);
+  console.log(isValid);
+  console.log(id);
   // const beautifiedItems = itemBeautify(items);
   // const uniqueParser = new ItemParser(items);
   // const uniqueData = uniqueParser.getAllUniqueData();
@@ -37,5 +41,5 @@ async function fetchResponsesContinuously(
   return fetchResponsesContinuously(res.next_change_id);
 }
 
-const firstId = "504332608-521275743-492515724-562653527-534471076";
+const firstId = "504989624-521968676-493147270-563383305-535158263";
 fetchResponsesContinuously(firstId);
