@@ -1,10 +1,10 @@
 import { OfficialApi, Modifiers } from "../types";
 
-import Item = OfficialApi.Item;
+import Item = OfficialApi.ItemFull;
 import ModifierType = Modifiers.ModifierType;
 import Modifier = Modifiers.Modifier;
 
-export class ModifiersConverter {
+class ModifiersConverter {
   private item: Item;
 
   private modifiers: Modifiers.Modifier[] = [];
@@ -110,3 +110,5 @@ export class ModifiersConverter {
     return value;
   }
 }
+
+export default ModifiersConverter;

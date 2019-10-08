@@ -145,8 +145,23 @@ export namespace OfficialApi {
     attr: "S" | "D" | "I" | "G" | false;
   }
 
+  export interface ItemShallow {
+    // item shallow is used when item shape in the stash resembles valid item
+    // only item identifying properties are checked
+    // it may be invalid (not up to date with the current app)
+    // if the item is not valid (wasn't parsed by the app, because new prop was added by the devs)
+    // full item body should be saved into db for further investigations
+    readonly id: string;
+    readonly inventoryId: string;
+    readonly league: string;
+  }
+
+  export interface ItemShallowWithBody extends ItemShallow {
+    readonly itemJson: string;
+  }
+
   // todo: check item interface. Some properties can be optional or some aren't stated atm. Check with array.every
-  export interface Item {
+  export interface ItemFull {
     /** optional flag for new jewels */
     abyssJewel?: boolean;
     /** no clue. Check it later */
@@ -178,7 +193,7 @@ export namespace OfficialApi {
     /** url for icon image */
     icon: string;
     /** unique item id which wouldn't change after using currency on the item */
-    id: string;
+    readonly id: string;
     identified: boolean;
     /** item level */
     ilvl: number;
@@ -230,30 +245,23 @@ export namespace OfficialApi {
     y: number;
   }
 
+  export type Item = ItemFull | ItemShallow;
   export interface Stash {
-    id: string;
-    items: Item[];
-    public: boolean;
-    /** stashType can be: 'Premium stash', 'Map stash', etc */
-    stashType: string;
-  }
-
-  export interface FullStash extends Stash {
-    accountName: string;
-    lastCharacterName: string;
+    readonly id: string;
+    readonly items: ReadonlyArray<ItemShallow>;
+    readonly public: boolean;
+    readonly lastCharacterName: string | null;
     /** name of stash defined by user */
-    stash: string;
-  }
-
-  export interface EmptyStash extends Stash {
-    accountName: null;
-    lastCharacterName: null;
-    stash: null;
+    readonly stash: string | null;
+    /** stashType can be: 'Premium stash', 'Map stash', etc */
+    readonly stashType: string;
+    readonly accountName: string | null;
+    readonly league: string | null;
   }
 
   export interface GeneralResponse {
-    next_change_id: string;
-    stashes: (EmptyStash | FullStash)[];
+    readonly next_change_id: string;
+    readonly stashes: ReadonlyArray<Stash>;
   }
 }
 
@@ -290,7 +298,7 @@ export namespace Modifiers {
 
 export namespace InternalApi {
   export interface Item {
-    officialApiItem: OfficialApi.Item;
+    officialApiItem: OfficialApi.ItemFull;
     modifiers: Modifiers.Modifier[];
   }
 }
