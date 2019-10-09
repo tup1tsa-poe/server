@@ -1,5 +1,5 @@
 create table mods (
-  id int not null auto_increment,
+  id mediumint unsigned not null auto_increment,
   name varchar(255) not null,
   value float not null default 0,
   min_value float not null default 0,

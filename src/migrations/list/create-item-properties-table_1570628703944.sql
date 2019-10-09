@@ -1,5 +1,5 @@
 create table item_properties (
-  id int not null auto_increment,
+  id int unsigned not null auto_increment,
   name varchar(255) not null,
   first_value varchar(255) not null,
   second_value float not null,

@@ -1,7 +1,7 @@
 create table item_sockets (
-  id int not null auto_increment,
-  item_id binary not null,
-  socket_id int not null,
+  id int unsigned not null auto_increment,
+  item_id binary(32) not null,
+  socket_id smallint unsigned not null,
   primary key (id),
   foreign key (socket_id) references sockets(id)
 );

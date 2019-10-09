@@ -1,5 +1,5 @@
 create table frametypes (
-  id int not null auto_increment,
+  id tinyint(2) unsigned not null,
   name varchar(255) not null unique,
   primary key (id)
 );
