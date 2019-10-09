@@ -1,6 +1,6 @@
 import { createConnection, format, Connection } from "mysql";
 
-type Connect = () => Promise<Connection>;
+type Connect = (databaseName: string | null) => Promise<Connection>;
 type Disconnect = (connection: Connection) => Promise<unknown>;
 type RunQueryViaPromise = (
   connection: Connection,
@@ -8,16 +8,17 @@ type RunQueryViaPromise = (
 ) => Promise<any>;
 type RunQuery = (query: string, values?: any[]) => Promise<any>;
 
-const connect: Connect = () =>
+export const connect: Connect = database =>
   // eslint-disable-next-line consistent-return
   new Promise((resolve, reject) => {
     const port = process.env.DATABASE_PORT;
     if (!port) {
       return reject(new Error("databse port should be provided"));
     }
+    const dbNameOptions = database ? { database } : {};
     const connection = createConnection({
+      ...dbNameOptions,
       host: process.env.DATABASE_HOST,
-      database: "cwhub",
       port: parseInt(port, 10),
       user: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD
@@ -30,7 +31,7 @@ const connect: Connect = () =>
     });
   });
 
-const disconnect: Disconnect = async connection =>
+export const disconnect: Disconnect = async connection =>
   new Promise((resolve, reject) => {
     // eslint-disable-next-line consistent-return
     connection.end(err => {
@@ -41,7 +42,7 @@ const disconnect: Disconnect = async connection =>
     });
   });
 
-const runQueryViaPromise: RunQueryViaPromise = (connection, query) =>
+export const runQueryViaPromise: RunQueryViaPromise = (connection, query) =>
   new Promise((resolve, reject) => {
     connection.query(query, (err, results) => {
       if (err) {
@@ -52,7 +53,7 @@ const runQueryViaPromise: RunQueryViaPromise = (connection, query) =>
   });
 
 const runQuery: RunQuery = async (query, values) => {
-  const connection = await connect();
+  const connection = await connect("poe");
   let formattedQuery = query;
   if (values) {
     formattedQuery = format(query, values);

@@ -10,8 +10,9 @@
     "lint": "eslint src/**/*.ts",
     "start": "ts-node src/server.ts",
     "start:debug": "tsc && node --inspect-brk ./dist/server.js",
-    "migrations": "tsc && node ./dist/migrations/migrations.js",
-    "migrations:debug": "tsc && node --inspect-brk ./dist/migrations/migrations.js",
+    "migrations-run": "tsc && node ./dist/migrations/migrationsRun.js",
+    "migrations-run:debug": "tsc && node --inspect-brk ./dist/migrations/migrationsRun.js",
+    "migrations-create": "ts-node src/migrations/createMigration.ts",
     "build": "tsc"
   },
   "keywords": [],
