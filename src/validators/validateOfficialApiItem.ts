@@ -109,6 +109,8 @@ const itemSchema = {
     explicitMods: stringArrayType,
     extended: extendedProperties,
     flavourText: stringArrayType,
+    fractured: booleanType,
+    fracturedMods: stringArrayType,
     frameType: { type: "number", minimum: 0, maximum: 9 },
     h: numberType,
     hybrid: hybridProperties,
@@ -167,7 +169,7 @@ const itemSchema = {
   ],
   additionalProperties: false,
   patternProperties: {
-    "^[\\s]*RaceReward": booleanType
+    "^[\\w\\W]*RaceReward$": booleanType
   }
 };
 

@@ -200,6 +200,8 @@ export namespace OfficialApi {
     readonly extended?: ExtendedProperties;
     /** ? */
     readonly flavourText?: ReadonlyArray<string>;
+    readonly fractured?: ReadonlyArray<boolean>;
+    readonly fracturedMods?: ReadonlyArray<string>;
     /** item rarity.  */
     readonly frameType: ItemRarity;
     /** slot height */
