@@ -2,11 +2,13 @@ import { promisify } from "util";
 import { config } from "dotenv";
 import * as path from "path";
 import { readdir as readdirCallback, readFile as readFileCallback } from "fs";
-import runQuery, {
-  connect,
-  runQueryViaPromise,
-  disconnect
-} from "../database/utils";
+import runSingleQuery from "../database/runSingleQuery";
+import connect from "../database/connect";
+import runQueryViaPromise from "../database/runQueryViaPromise";
+import disconnect from "../database/disconnect";
+import startTransaction from "../database/startTransaction";
+import commitTransaction from "../database/commitTransaction";
+import rollbackTransaction from "../database/rollbackTransaction";
 
 const readFile = promisify(readFileCallback);
 const readdir = promisify(readdirCallback);
@@ -16,7 +18,6 @@ config();
 type RunMigrations = () => Promise<void>;
 type GetAllMigrationsList = () => Promise<string[]>;
 type GetNewMigrationsList = () => Promise<string[]>;
-type MarkAllMigrationsAsCompleted = () => Promise<void>;
 type GetTimestampFromName = (name: string) => number;
 
 const getTimestampFromName: GetTimestampFromName = name => {
@@ -31,7 +32,7 @@ const getTimestampFromName: GetTimestampFromName = name => {
 const checkIfDatabaseExists = async () => {
   const query = `use poe`;
   try {
-    await runQuery(query);
+    await runSingleQuery(query);
     return true;
   } catch (err) {
     return false;
@@ -41,7 +42,7 @@ const checkIfDatabaseExists = async () => {
 const checkIfMigrationsTableExists = async () => {
   const query = `select * from migrations`;
   try {
-    await runQuery(query);
+    await runSingleQuery(query);
     return true;
   } catch (err) {
     return false;
@@ -64,7 +65,7 @@ const createMigrationsTable = () => {
         primary key (id)
     );
     `;
-  return runQuery(query);
+  return runSingleQuery(query);
 };
 
 const getAllMigrationsList: GetAllMigrationsList = async () => {
@@ -91,18 +92,13 @@ const getNewMigrationsList: GetNewMigrationsList = async () => {
     insert ignore into migrations
         (name) values ?
   `;
-  await runQuery(insertQuery, [allMigrations]);
+  await runSingleQuery(insertQuery, [allMigrations]);
   const selectQuery = `
-  select name from migrations 
+  select name from migrations
   where completed = 0
   `;
-  const result: { name: string }[] = await runQuery(selectQuery);
+  const result: { name: string }[] = await runSingleQuery(selectQuery);
   return result.map(row => row.name);
-};
-
-const markAllMigrationsAsCompleted: MarkAllMigrationsAsCompleted = () => {
-  const query = "update migrations set completed = 1";
-  return runQuery(query);
 };
 
 const runMigrations: RunMigrations = async () => {
@@ -115,19 +111,27 @@ const runMigrations: RunMigrations = async () => {
     await createMigrationsTable();
   }
   const migrations = await getNewMigrationsList();
-  // eslint-disable-next-line no-restricted-syntax
-  for await (const migrationName of migrations) {
-    const migrationPath = path.join(
-      `./src/migrations/list/`,
-      `${migrationName}.sql`
-    );
-    const query = await readFile(migrationPath, "utf-8");
-    await runQuery(query);
+  if (migrations.length === 0) {
+    return;
   }
-  await markAllMigrationsAsCompleted();
-  // todo: check this.
-  // Connection may not be closed automatically so node.js is not terminated
-  process.exit(0);
+  const connection = await startTransaction();
+  try {
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const migrationName of migrations) {
+      const migrationPath = path.join(
+        `./src/migrations/list/`,
+        `${migrationName}.sql`
+      );
+      const query = await readFile(migrationPath, "utf-8");
+      await runQueryViaPromise(connection, query);
+    }
+    const query = "update migrations set completed = 1";
+    await runQueryViaPromise(connection, query);
+  } catch (err) {
+    await rollbackTransaction(connection);
+    return;
+  }
+  await commitTransaction(connection);
 };
 
 runMigrations();
