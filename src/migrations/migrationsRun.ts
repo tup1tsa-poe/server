@@ -1,7 +1,5 @@
-import { promisify } from "util";
 import { config } from "dotenv";
 import * as path from "path";
-import { readdir as readdirCallback, readFile as readFileCallback } from "fs";
 import runSingleQuery from "../database/runSingleQuery";
 import connect from "../database/connect";
 import runQueryViaPromise from "../database/runQueryViaPromise";
@@ -9,9 +7,7 @@ import disconnect from "../database/disconnect";
 import startTransaction from "../database/startTransaction";
 import commitTransaction from "../database/commitTransaction";
 import rollbackTransaction from "../database/rollbackTransaction";
-
-const readFile = promisify(readFileCallback);
-const readdir = promisify(readdirCallback);
+import { readdir } from "../utils";
 
 config();
 
@@ -29,47 +25,29 @@ const getTimestampFromName: GetTimestampFromName = name => {
   return parseInt(match[1], 10);
 };
 
-const checkIfDatabaseExists = async () => {
-  const query = `use poe`;
-  try {
-    await runSingleQuery(query);
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
-
-const checkIfMigrationsTableExists = async () => {
-  const query = `select * from migrations`;
-  try {
-    await runSingleQuery(query);
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
-
 const createDatabase = async () => {
   const connection = await connect(null);
-  const query = `create schema poe`;
-  await runQueryViaPromise(connection, query);
+  const inlineQuery = `create schema if not exists poe`;
+  await runQueryViaPromise({ connection, inlineQuery });
   return disconnect(connection);
 };
 
 const createMigrationsTable = () => {
-  const query = `
-    create table migrations (
+  const inlineQuery = `
+    create table if not exists migrations (
         id int not null auto_increment,
         name varchar(255) not null unique,
         completed tinyint not null default 0,
         primary key (id)
     );
     `;
-  return runSingleQuery(query);
+  return runSingleQuery({ inlineQuery });
 };
 
 const getAllMigrationsList: GetAllMigrationsList = async () => {
-  const files = await readdir(path.resolve("./src/migrations/list"));
+  const files = await readdir(
+    path.resolve("./src/database/queries/migrations")
+  );
   const allMigrationsNames = files.filter(fileName =>
     /^.+_[\d]+.sql$/.test(fileName)
   );
@@ -92,24 +70,20 @@ const getNewMigrationsList: GetNewMigrationsList = async () => {
     insert ignore into migrations
         (name) values ?
   `;
-  await runSingleQuery(insertQuery, [allMigrations]);
+  await runSingleQuery({ inlineQuery: insertQuery, values: [allMigrations] });
   const selectQuery = `
   select name from migrations
   where completed = 0
   `;
-  const result: { name: string }[] = await runSingleQuery(selectQuery);
+  const result: { name: string }[] = await runSingleQuery({
+    inlineQuery: selectQuery
+  });
   return result.map(row => row.name);
 };
 
 const runMigrations: RunMigrations = async () => {
-  const isDbCreated = await checkIfDatabaseExists();
-  if (!isDbCreated) {
-    await createDatabase();
-  }
-  const isMigrationsTableCreated = await checkIfMigrationsTableExists();
-  if (!isMigrationsTableCreated) {
-    await createMigrationsTable();
-  }
+  await createDatabase();
+  await createMigrationsTable();
   const migrations = await getNewMigrationsList();
   if (migrations.length === 0) {
     return;
@@ -118,15 +92,13 @@ const runMigrations: RunMigrations = async () => {
   try {
     // eslint-disable-next-line no-restricted-syntax
     for await (const migrationName of migrations) {
-      const migrationPath = path.join(
-        `./src/migrations/list/`,
-        `${migrationName}.sql`
-      );
-      const query = await readFile(migrationPath, "utf-8");
-      await runQueryViaPromise(connection, query);
+      await runQueryViaPromise({
+        connection,
+        filename: `migrations/${migrationName}`
+      });
     }
-    const query = "update migrations set completed = 1";
-    await runQueryViaPromise(connection, query);
+    const inlineQuery = "update migrations set completed = 1";
+    await runQueryViaPromise({ connection, inlineQuery });
   } catch (err) {
     await rollbackTransaction(connection);
     return;

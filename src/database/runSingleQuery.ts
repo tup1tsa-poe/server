@@ -1,20 +1,31 @@
-import connect from "./connect";
-import disconnect from "./disconnect";
 import runQueryViaPromise from "./runQueryViaPromise";
+import startTransaction from "./startTransaction";
+import rollbackTransaction from "./rollbackTransaction";
+import commitTransaction from "./commitTransaction";
 
-type RunSingleQuery = (query: string, values?: any[]) => Promise<any>;
+interface FilenameOptions {
+  readonly filename: string;
+  readonly values?: any[];
+}
+interface InlineQueryOptions {
+  readonly inlineQuery: string;
+  readonly values?: any[];
+}
+type RunSingleQuery = (
+  options: FilenameOptions | InlineQueryOptions
+) => Promise<any>;
 
-const runSingleQuery: RunSingleQuery = async (query, values) => {
-  const connection = await connect("poe");
+const runSingleQuery: RunSingleQuery = async options => {
+  const connection = await startTransaction();
   let result: any;
   try {
-    result = await runQueryViaPromise(connection, query, values);
+    result = await runQueryViaPromise({ ...options, connection });
     // eslint-disable-next-line no-empty
   } catch (err) {
-    await disconnect(connection);
+    await rollbackTransaction(connection);
     throw err;
   }
-  await disconnect(connection);
+  await commitTransaction(connection);
   return result;
 };
 
