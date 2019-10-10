@@ -12,7 +12,9 @@ if (typeof process.argv[2] !== "string") {
 
 type IsMigrationFileCreated = (name: string) => Promise<boolean>;
 const isMigrationFileCreated: IsMigrationFileCreated = async name => {
-  const allFiles = await readdir(path.resolve("./src/migrations/list"));
+  const allFiles = await readdir(
+    path.resolve("./src/database/queries/migrations")
+  );
   const sqlFiles = allFiles
     .filter(fileName => /^.+_[\d]+.sql$/.test(fileName))
     .map(fileName => fileName.replace(/_[\d]+.sql$/g, ""));
@@ -28,7 +30,7 @@ const createMigrationFile: CreateMigrationFile = async name => {
   const timestamp = new Date().getTime().toString();
   const defaultText = "select 1;";
   const filePath = path.resolve(
-    `./src/migrations/list/${name}_${timestamp}.sql`
+    `./src/database/queries/migrations/${name}_${timestamp}.sql`
   );
   return writeFile(filePath, defaultText, "utf-8");
 };
